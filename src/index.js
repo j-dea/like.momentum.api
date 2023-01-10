@@ -1,13 +1,15 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import weatherRouter from './app/weather/router/weather.js';
 import cors from 'cors';
+import https from 'https';
+import fs from 'fs';
+import weatherRouter from './app/weather/router/weather.js';
 
 dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5500'
+    origin: 'https://j-dea.github.io'
 }));
 app.use(express.json());
 app.use('/weather', weatherRouter);
@@ -23,3 +25,13 @@ app.use((err, req, res, next) => {
 app.listen(process.env.PORT, () => {
     console.log(`Momentum API Service Listening on port ${process.env.PORT}`);
 });
+
+https
+    .createServer({
+        ca: fs.readFileSync(`${process.env.SSL_PATH}/fullchain.pem`),
+        key: fs.readFileSync(`${process.env.SSL_PATH}/privkey.pem`),
+        cert: fs.readFileSync(`${process.env.SSL_PATH}/cert.pem`)
+    }, app)
+    .listen(process.env.PORT, () => {
+        console.log(`Momentum API Service Listening on port ${process.env.PORT}`);
+    });
