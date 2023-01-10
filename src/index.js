@@ -24,10 +24,6 @@ app.use((err, req, res, next) => {
     res.sendStatus(500);
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Momentum API Service Listening on port ${process.env.PORT}`);
-});
-
 https
     .createServer({
         ca: fs.readFileSync(`${process.env.SSL_PATH}/fullchain.pem`),
