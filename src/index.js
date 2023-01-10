@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import https from 'https';
 import fs from 'fs';
+import morgan from 'morgan';
 import weatherRouter from './app/weather/router/weather.js';
 
 dotenv.config();
@@ -11,6 +12,7 @@ const app = express();
 app.use(cors({
     origin: 'https://j-dea.github.io'
 }));
+app.use(morgan('combined'));
 app.use(express.json());
 app.use('/weather', weatherRouter);
 
